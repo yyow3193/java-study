@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package message;
+option java_package = "protocols.message";
+
+message CRequest
+{
+	int32 a = 1;
+	int32 b = 2;
+}
+
+message SRequest
+{
+	int32 a = 1;
+	int32 b = 2;
+}
+

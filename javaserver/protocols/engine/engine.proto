@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package engine;
+option java_package = "protocols.engine";
+
+message header
+{
+	int32 type = 1;
+	bytes bytes = 2;
+}
+
