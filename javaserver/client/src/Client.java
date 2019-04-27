@@ -1,6 +1,7 @@
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import network.Connector;
+import network.INetConnector;
+import network.nettyimp.NettyConnector;
 
 public class Client {
 
@@ -9,8 +10,8 @@ public class Client {
         EventLoopGroup group = new NioEventLoopGroup();
 
         try{
-            Connector connector = new Connector("0.0.0.0", 8007, new GameChannelManager(), group);
-            connector.start();
+            INetConnector nettyConnector = new NettyConnector("0.0.0.0", 8007, group, new ServerNetHandler());
+            nettyConnector.start();
 
             while (true){
                 Thread.sleep(100000000);

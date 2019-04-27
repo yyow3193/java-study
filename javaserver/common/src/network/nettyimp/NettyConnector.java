@@ -1,4 +1,4 @@
-package network;
+package network.nettyimp;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -9,23 +9,29 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import network.INetConnector;
+import network.INetHandler;
 
 import java.util.concurrent.TimeUnit;
 
-public class Connector {
+public class NettyConnector implements INetConnector {
     static final boolean SSL = System.getProperty("ssl") != null;
 
     private EventLoopGroup bossEventLoop;
-    private AChannelManager aChannelManager;
     private Bootstrap b = null;
     private String ip;
     private int port;
+    private INetHandler iNetHandler;
 
-    public Connector(String ip, int port, AChannelManager aChannelManager, EventLoopGroup bossEventLoop) {
+    public NettyConnector(String ip,
+                          int port,
+                          EventLoopGroup bossEventLoop,
+                          INetHandler iNetHandler
+                          ) {
         this.bossEventLoop = bossEventLoop;
-        this.aChannelManager = aChannelManager;
         this.ip = ip;
         this.port = port;
+        this.iNetHandler = iNetHandler;
     }
 
     public void doConnect() {
@@ -59,6 +65,7 @@ public class Connector {
 
     }
 
+    @Override
     public void start() throws Exception {
         // Configure SSL.
         final SslContext sslCtx;
@@ -82,7 +89,7 @@ public class Connector {
                         }
                         p.addLast(new LoggingHandler(LogLevel.INFO));
                         p.addLast(new ProtocolHeaderEncode());
-                        p.addLast(aChannelManager.newChannelHandler());
+                        p.addLast(new NettyNetHandler(iNetHandler));
                     }
                 });
 

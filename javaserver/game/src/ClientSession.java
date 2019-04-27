@@ -1,9 +1,9 @@
-import io.netty.channel.ChannelHandlerContext;
+import network.INetHandlerContext;
 
 public class ClientSession {
-    private ChannelHandlerContext ctx;
+    private INetHandlerContext ctx;
 
-    public ClientSession(ChannelHandlerContext ctx){
+    public ClientSession(INetHandlerContext ctx){
         this.ctx = ctx;
     }
 }

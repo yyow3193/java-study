@@ -17,8 +17,8 @@
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import msghandler.MsgHandlerRegistryFactory;
-import network.AChannelManager;
-import network.Acceptor;
+import network.INetAcceptor;
+import network.nettyimp.NettyAcceptor;
 
 public final class Game {
 
@@ -31,9 +31,8 @@ public final class Game {
         EventLoopGroup bossGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors());
         EventLoopGroup workerGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors());
 
-        AChannelManager aChannelManager = new ClientChannelManager();
-        Acceptor clientAcceptor = new Acceptor("0.0.0.0", 8007, aChannelManager, bossGroup, workerGroup);
-        clientAcceptor.start();
+        INetAcceptor clientNettyAcceptor = new NettyAcceptor("0.0.0.0", 8007, bossGroup, workerGroup, new ClientNetHandler());
+        clientNettyAcceptor.start();
 
         while (isRun){
             Thread.sleep(1000000);
